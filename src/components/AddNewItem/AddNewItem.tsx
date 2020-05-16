@@ -1,53 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import './AddNewItem.sass';
-import Button from '../Button/Button';
+import AddFormItem from './AddFormItem/AddFormItem';
 
 interface AddNewItemProps {
-	variant: string;
-	onAdd?(): void;
+	variant: 'column' | 'card';
+	onAdd?: (value: any) => any;
+	parrentId?: number;
 }
 
 const AddNewItem: React.FC<AddNewItemProps> = (props) => {
+	const { variant, onAdd, parrentId }: AddNewItemProps = props;
 	const [show, setShow] = useState<boolean>(false);
+	const [text, setText] = useState<string>('');
 
 	const showHandler = () => {
 		setShow(!show);
 	};
 
-	const { variant, onAdd }: AddNewItemProps = props;
-
-	const handelSubmit = (event: React.SyntheticEvent) => {
-		event.preventDefault();
+	const handelSubmit = (event?: React.FormEvent<HTMLFormElement>) => {
+		event && event.preventDefault();
+		if (text !== '') {
+			if (variant === 'column') {
+				onAdd!({ title: text, id: Date.now(), cards: [] });
+				setText('');
+			} else {
+				onAdd!({ title: text, id: Date.now(), parrentId: parrentId });
+				setText('');
+			}
+		}
 	};
 
+	const onChangeText = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value), []);
+
 	const placeholder: string = `Введите название ${variant === 'column' ? 'колонки' : 'карточки'}`;
+	const textButton: string = `Добавить ${variant === 'column' ? 'колонку' : 'карточку'}`;
 	return (
 		<div className='add-item'>
 			{!show ? (
-				<div onClick={showHandler} className='add-item__open'>
+				<button onClick={showHandler} className='add-item__open'>
 					<div className='icon-add'></div>
-					<span>{placeholder} </span>
-				</div>
+					<span>{placeholder}</span>
+				</button>
 			) : (
-				<form onSubmit={handelSubmit}>
-					{variant === 'column' ? (
-						<div className='add-item__form'>
-							<input className='card add-item__input' placeholder={placeholder} type='text' />
-							<div className='add-item__btn'>
-								<Button>Добавить колонку</Button>
-								<div onClick={showHandler} className='icon-close'></div>
-							</div>
-						</div>
-					) : (
-						<div className='add-item__form'>
-							<textarea className='card add-item__input add-item__textarea' placeholder={placeholder} />
-							<div className='add-item__btn'>
-								<Button>Добавить карточку</Button>
-								<div onClick={showHandler} className='icon-close'></div>
-							</div>
-						</div>
-					)}
-				</form>
+				<AddFormItem
+					text={text}
+					onChangeText={onChangeText}
+					showHandler={showHandler}
+					placeholder={placeholder}
+					textButton={textButton}
+					variant={variant}
+					handelSubmit={handelSubmit}
+				/>
 			)}
 		</div>
 	);

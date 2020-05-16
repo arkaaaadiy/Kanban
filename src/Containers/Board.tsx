@@ -1,41 +1,49 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import Column from '../components/Column/Column';
 import AddNewItem from '../components/AddNewItem/AddNewItem';
 import Card from '../components/Card/Card';
-import { IBoard } from '../Store/board/types';
+import { rootState } from '../Store/store';
+import { actions } from '../Store/actions/panelActions';
 
-
-const Board: React.FC<IBoard> = (props) => {
-    const {columns = []} = props
+const Board = (props: Props) => {	
+	const { columns = [], createColumn, createCard } = props;
 	return (
 		<>
 			{columns.map((column) => (
-				<Column>
-					<h2 className='column__header'>{column.title}</h2>
-					<div className='column__list'>
-						<div className='column__wrapper'>
-							{column.cards.map((card) => (
-								<Card title={card.title} />
-							))}
+				<div className='content' key={column.id}>
+					<Column>
+						<h2 className='column__header'>{column.title}</h2>
+						<div className='column__list'>
+							<div className='column__wrapper'>
+								{column.cards.map((card) => (
+									<Card key={card.id} title={card.title} />
+								))}
+							</div>
 						</div>
-					</div>
-					<div className='column__addbtn'>
-						<AddNewItem variant='card' />
-					</div>
-				</Column>
+						<div className='column__addbtn'>
+							<AddNewItem onAdd={createCard} parrentId={column.id} variant='card' />
+						</div>
+					</Column>
+				</div>
 			))}
 			<div className='content'>
 				<Column>
-					<AddNewItem variant='column' />
+					<AddNewItem onAdd={createColumn} variant='column' />
 				</Column>
 			</div>
 		</>
 	);
 };
 
+const mapState = (state: rootState) => ({
+	columns: state.panel.columns,
+});
 
+const {createCard, createColumn} = actions
 
-export default connect((state: IBoard)=>({
-    columns: state.columns
-}))(Board);
+const connector = connect(mapState, { createCard, createColumn });
+
+type Props = ConnectedProps<typeof connector>;
+
+export default connector(Board);

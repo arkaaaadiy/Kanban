@@ -1,12 +1,14 @@
-export const CREATE_COLUMN = 'CREATE_COLUMN'
-export const CREATE_CARD = 'CREATE_CARD' 
+
 
 export interface IColumn {
     title: string
+    id: number
     cards: Array<ICard>
 }
 
 export interface ICard {
+    parrentId: number
+    id: number
     title: string
 }
 
@@ -15,12 +17,12 @@ export interface IBoard {
 }
 
 interface CreateColumnAction {
-    type: typeof CREATE_COLUMN
+    type: 'CREATE_COLUMN'
     payload: IColumn
 }
 
 interface CreateCardAction {
-    type: typeof CREATE_CARD
+    type: 'CREATE_CARD'
     payload: ICard
 }
 

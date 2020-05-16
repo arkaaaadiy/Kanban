@@ -6,7 +6,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = (props) => {
-    const {title} = props
+	const {title} = props
     return (
 		<div className='card'>
 			<span>

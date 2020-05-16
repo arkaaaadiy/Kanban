@@ -1,13 +1,19 @@
-import React from 'react'
-import './Button.sass'
-
+import React from 'react';
+import './Button.sass';
 
 interface ButtonProps {
-    children: string
+	onClick?(e: any): any;
+	children: string[];
+	onKeyPress?(event: React.KeyboardEvent): void;
+	type?: 'button' | 'submit' | 'reset';
 }
 
-const Button = ({children}:ButtonProps) => {
-    return (<button className='button'>{children}</button>)
-}
+const Button: React.FC<ButtonProps> = ({ children, onClick, onKeyPress, type }) => {
+	return (
+		<button onKeyPress={onKeyPress} type={type} onClick={onClick} className='button'>
+			{children}
+		</button>
+	);
+};
 
-export default Button
+export default Button;
