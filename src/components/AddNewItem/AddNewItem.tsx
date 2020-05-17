@@ -5,7 +5,7 @@ import AddFormItem from './AddFormItem/AddFormItem';
 interface AddNewItemProps {
 	variant: 'column' | 'card';
 	onAdd?: (value: any) => any;
-	parrentId?: number;
+	parrentId?: string;
 }
 
 const AddNewItem: React.FC<AddNewItemProps> = (props) => {
@@ -21,10 +21,10 @@ const AddNewItem: React.FC<AddNewItemProps> = (props) => {
 		event && event.preventDefault();
 		if (text !== '') {
 			if (variant === 'column') {
-				onAdd!({ title: text, id: Date.now(), cards: [] });
+				onAdd!({ title: text, id: Date.now().toString(), cards: [] });
 				setText('');
 			} else {
-				onAdd!({ title: text, id: Date.now(), parrentId: parrentId });
+				onAdd!({ title: text, id: Date.now().toString(), parrentId: parrentId });
 				setText('');
 			}
 		}

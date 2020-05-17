@@ -3,13 +3,14 @@ import './Column.sass';
 
 
 interface ColumnProps {
-    children: React.ReactNode
+	children: React.ReactNode
+	ref?: any
 }
 
 const Column: React.FC<ColumnProps> = (props) => {
-    const {children}:ColumnProps = props
+    const {children, ref} = props
 	return (
-		<div className='column'>
+		<div ref={ref} className='column'>
 			{children}
 		</div>
 	);

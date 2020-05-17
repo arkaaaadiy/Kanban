@@ -2,13 +2,13 @@
 
 export interface IColumn {
     title: string
-    id: number
+    id: string
     cards: Array<ICard>
 }
 
 export interface ICard {
-    parrentId: number
-    id: number
+    parrentId: string
+    id: string
     title: string
 }
 

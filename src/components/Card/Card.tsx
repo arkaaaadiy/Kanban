@@ -2,13 +2,15 @@ import React from 'react';
 import './Card.sass';
 
 interface CardProps {
-    title: string
+	title: string
+	innerRef?: any
+	className?: string
 }
 
 const Card: React.FC<CardProps> = (props) => {
-	const {title} = props
+	const {title, innerRef, className, ...restprops} = props
     return (
-		<div className='card'>
+		<div {...restprops} ref={innerRef} className={'card' + className}>
 			<span>
             {title}
 			</span>
