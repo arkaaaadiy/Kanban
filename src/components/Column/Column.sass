@@ -9,10 +9,6 @@
     position: relative
     display: flex
     flex-direction: column
-    &__header
-        flex: 0 0 auto
-        max-width: 100%
-        overflow-wrap: anywhere
     &__wrapper
         display: grid
         grid-template-rows: 1fr
@@ -28,3 +24,14 @@
     &__addbtn
         flex: 1 1 auto
         width: 248px
+    &__delete
+        display: none
+        position: absolute
+        top: 15px
+        right: 12px
+    &__header
+        flex: 0 0 auto
+        max-width: 100%
+        overflow-wrap: anywhere
+    &:hover &__delete
+        display: block            

@@ -16,11 +16,9 @@ import {
 } from 'react-beautiful-dnd';
 
 function getStyle(style: DraggingStyle | NotDraggingStyle, snapshot: DraggableStateSnapshot) {
-	
 	if (!snapshot.isDragging || snapshot.isDropAnimating) {
-		console.log(snapshot);
 		return style;
-	}	
+	}
 
 	const translate = style.transform;
 	// move to the right spot
@@ -33,12 +31,12 @@ function getStyle(style: DraggingStyle | NotDraggingStyle, snapshot: DraggableSt
 		...style,
 		transform: `${translate} ${rotate}`,
 		// transition: `all 0.001s`,
-		transitionDuration: `0.001s`
+		transitionDuration: `0.001s`,
 	};
 }
 
 const Board = (props: Props) => {
-	const { columns = [], createColumn, createCard, reorderCards, moveCards } = props;
+	const { columns = [], createColumn, createCard, reorderCards, moveCards, deleteCard, deleteColumn } = props;
 
 	const onDragEnd = useCallback(
 		(result: DropResult) => {
@@ -53,6 +51,10 @@ const Board = (props: Props) => {
 		[moveCards, reorderCards]
 	);
 
+	const onDeleteColumn = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, id: number) =>{
+		deleteColumn(id)
+	}
+
 	return (
 		<>
 			<DragDropContext onDragEnd={onDragEnd}>
@@ -62,6 +64,7 @@ const Board = (props: Props) => {
 							<div ref={provided.innerRef} className='content' key={column.id}>
 								<Column>
 									<h2 className='column__header'>{column.title}</h2>
+									<div onClick={e => onDeleteColumn(e, +column.id)} className='icon-close column__delete'></div>
 									<div className='column__list'>
 										<div className='column__wrapper'>
 											{column.cards.map((item, index) => (
@@ -73,8 +76,9 @@ const Board = (props: Props) => {
 															{...provided.draggableProps}
 															{...provided.dragHandleProps}
 															key={item.id}
+															id={+item.id}
 															title={item.title}
-															// onDeleteCard={}
+															onDeleteCard={deleteCard}
 															style={getStyle(provided.draggableProps.style!, snapshot)}
 														/>
 													)}
