@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../../Button/Button';
+import ResizeTextarea from '../../ResizeTextarea/ResizeTextarea';
 
 interface AddFormItemProps {
 	placeholder: string;
@@ -7,12 +8,13 @@ interface AddFormItemProps {
 	variant: string;	
 	text: string;	
 	handelSubmit: () => void;
-	onChangeText: (e: any) => void;
+	onChangeText: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	showHandler: () => void;
 }
 
 const AddFormItem = (props: AddFormItemProps) => {
-	const {text, placeholder, textButton, variant, handelSubmit, onChangeText, showHandler } = props;
+	const {text, placeholder, textButton, variant, handelSubmit, onChangeText, showHandler} = props;
+	
 
 	const onEnterPress = (e: React.KeyboardEvent) => {
 		if (e.keyCode === 13 && e.shiftKey === false) {
@@ -35,14 +37,12 @@ const AddFormItem = (props: AddFormItemProps) => {
 							autoFocus
 						/>
 					) : (
-						<textarea		
-							value={text}					
-							onChange={onChangeText}
-							onKeyDown={onEnterPress}
-							className='card add-item__input add-item__textarea'
-							placeholder={placeholder}
-							autoFocus
-						/>
+						<ResizeTextarea 
+						value={text}					
+						onChange={onChangeText}
+						onKeyDown={onEnterPress}						
+						placeholder={placeholder}
+						/>						
 					)}
 					<div className='add-item__btn'>
 						<Button type='submit'>{textButton} </Button>

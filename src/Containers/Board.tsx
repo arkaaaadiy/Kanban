@@ -13,6 +13,9 @@ const Board = (props: Props) => {
 	const onDragEnd = useCallback(
 		(result: DropResult) => {
 			const { source, destination } = result;
+			if (destination === null) {
+				return
+			}
 			source.droppableId === destination?.droppableId
 				? reorderCards(source, destination!)
 				: moveCards(source, destination!);
@@ -49,7 +52,7 @@ const Board = (props: Props) => {
 										</div>
 									</div>
 									<div className='column__addbtn'>
-										<AddNewItem onAdd={createCard} parrentId={column.id} variant='card' />
+										<AddNewItem onAddCard={createCard} parrentId={column.id} variant='card' />
 									</div>
 								</Column>
 							</div>
@@ -59,7 +62,7 @@ const Board = (props: Props) => {
 			</DragDropContext>
 			<div className='content'>
 				<Column>
-					<AddNewItem onAdd={createColumn} variant='column' />
+					<AddNewItem onAddColumn={createColumn} variant='column' />
 				</Column>
 			</div>
 		</>

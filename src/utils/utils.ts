@@ -1,4 +1,4 @@
-import { IBoard, IColumn, ICard } from '../Store/board/types';
+import { IBoard, ICard } from '../Store/board/types';
 import { DraggableLocation } from 'react-beautiful-dnd';
 
 export const reorderCard = (
@@ -27,28 +27,25 @@ export const moveCard = (
 	destination: DraggableLocation
 ): IBoard => {
 	let newState = { ...state };
-	let sourceCard: ICard[];
-	console.log(source, destination);
-	return {
-		columns: newState.columns.map((column) => {
-			if (column.id === source.droppableId) {
-				sourceCard = column.cards.filter((_, index) => index === source.index);
-				return {
-					title: column.title,
-					id: column.id,
-					cards: column.cards.filter((_, index) => index !== source.index),
-				};
-			} else if (column.id === destination.droppableId) {
-				let temp: Array<ICard> = [...column.cards];
-				temp.splice(destination.index, 0, ...sourceCard) 
-				return {
-					title: column.title,
-					id: column.id,
-					cards: temp,
-				};
-			}
+	let sourceCard: ICard[] = [];
+	newState.columns = newState.columns.map((column) => {
+		if (column.id === source.droppableId) {
+			column.cards.forEach((card, index) => (index === source.index ? sourceCard.push(card) : ''));
+			return {
+				title: column.title,
+				id: column.id,
+				cards: column.cards.filter((_, index) => index !== source.index),
+			};
+		}
+		return column;
+	});
 
+	newState.columns = newState.columns.map((column) => {
+		if (column.id === destination.droppableId) {
+			column.cards.splice(destination.index, 0, ...sourceCard);
 			return column;
-		}),
-	};
+		}
+		return column;
+	});
+	return newState;
 };
