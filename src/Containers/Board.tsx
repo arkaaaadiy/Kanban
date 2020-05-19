@@ -5,7 +5,37 @@ import AddNewItem from '../components/AddNewItem/AddNewItem';
 import Card from '../components/Card/Card';
 import { rootState } from '../Store/store';
 import { actions } from '../Store/actions/panelActions';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import {
+	DragDropContext,
+	Droppable,
+	Draggable,
+	DropResult,
+	DraggableStateSnapshot,
+	DraggingStyle,
+	NotDraggingStyle,
+} from 'react-beautiful-dnd';
+
+function getStyle(style: DraggingStyle | NotDraggingStyle, snapshot: DraggableStateSnapshot) {
+	
+	if (!snapshot.isDragging || snapshot.isDropAnimating) {
+		console.log(snapshot);
+		return style;
+	}	
+
+	const translate = style.transform;
+	// move to the right spot
+
+	// add a bit of turn for fun
+	const rotate = 'rotate(5deg)';
+
+	// patching the existing style
+	return {
+		...style,
+		transform: `${translate} ${rotate}`,
+		// transition: `all 0.001s`,
+		transitionDuration: `0.001s`
+	};
+}
 
 const Board = (props: Props) => {
 	const { columns = [], createColumn, createCard, reorderCards, moveCards } = props;
@@ -14,7 +44,7 @@ const Board = (props: Props) => {
 		(result: DropResult) => {
 			const { source, destination } = result;
 			if (destination === null) {
-				return
+				return;
 			}
 			source.droppableId === destination?.droppableId
 				? reorderCards(source, destination!)
@@ -44,6 +74,8 @@ const Board = (props: Props) => {
 															{...provided.dragHandleProps}
 															key={item.id}
 															title={item.title}
+															// onDeleteCard={}
+															style={getStyle(provided.draggableProps.style!, snapshot)}
 														/>
 													)}
 												</Draggable>
