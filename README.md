@@ -1,3 +1,18 @@
+# This project was developed according to the test task vk
+
+view task [Figma disign](https://www.figma.com/file/GRQn8carvWJVsKJeWmIX6Pbr/Kanban?node-id=0%3A1)
+
+Demo: [Kanban.ru](https://kanban-2fbda.web.app/)
+
+
+I used:
+
+* React
+* Redux
+* react-beautiful-dnd
+* typescript
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
